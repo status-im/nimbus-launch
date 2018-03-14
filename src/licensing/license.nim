@@ -8,13 +8,8 @@
 # #################################################
 # Generate the MIT license file for Status projects
 
-import  times, strformat, macros, tables,
-        ../private/datatypes
-
-macro parseConstStr(s: static[string]): untyped =
-  # The strformat `$` only works on string literals
-  # So we transform the identifier to its string literal value
-  result = newLit(s)
+import  times, strformat, tables, sequtils,
+        ../private/[datatypes, format]
 
 const
   # Embed the license at compile-team so that nimbusLaunch can be used standalone
@@ -38,7 +33,14 @@ const
     GPLv3: "LICENSE-GPLv3"
   }.toTable
 
-proc getLicense*(licenses: Licenses): License =
+  licenseDescNimble = {
+    Apache2: "Apache License 2.0",
+    MIT: "MIT",
+    GPLv2: "GPLv2",
+    GPLv3: "GPLv3"
+  }.toTable
+
+proc getLicense*(licenses: Licenses): License {.noSideEffect.}=
   ## Extract the license from a Licenses set
   assert licenses.card == 1
   for license in licenses:
@@ -46,17 +48,17 @@ proc getLicense*(licenses: Licenses): License =
     break
 
 proc license*(projectName: string, license: License, year = getTime().utc().format("yyyy"),
-              copyrightHolder = "Status Research & Development GmbH"): string =
+              copyrightHolder = "Status Research & Development GmbH"): string {.noSideEffect.}=
 
   case license:
-  of MIT: result = &parseConstStr(license_MIT)
-  of Apache2: result = &parseConstStr(license_APACHEv2)
-  of GPLv2: result = &parseConstStr(license_GPLv2)
-  of GPLv3: result = &parseConstStr(license_GPLv3)
+  of MIT: result = fmt_const license_MIT
+  of Apache2: result = fmt_const license_APACHEv2
+  of GPLv2: result = fmt_const license_GPLv2
+  of GPLv3: result = fmt_const license_GPLv3
 
 proc licenseHeader*(projectName: string, licenses: Licenses,
                     year = getTime().utc().format("yyyy"),
-                    copyrightHolder = "Status Research & Development GmbH"): string =
+                    copyrightHolder = "Status Research & Development GmbH"): string {.noSideEffect.}=
 
   let nbLicenses = licenses.card
   assert nbLicenses != 0
@@ -74,4 +76,14 @@ proc licenseHeader*(projectName: string, licenses: Licenses,
     for license in licenses:
       result.add "#   * " & licenseHeaders.getOrDefault(license) & '\n'
     result.add "# at your option. This file may not be copied, modified, or distributed except according to those terms."
+
+proc genLicensesDesc*(licenses: Licenses): string {.noSideEffect.}=
+
+  result = ""
+  var start = true
+  for license in licenses:
+    if not start:
+      result.add " or "
+    start = false
+    result.add licenseDescNimble.getOrDefault license
 

@@ -1,16 +1,15 @@
 # Nimbus-launch
 # Copyright (c) 2018 Status Research & Development GmbH
 # Licensed under either of
-#
 #  * Apache License, version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 #  * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-#
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 import  cligen,
         os, strutils, tables,
         ./private/[datatypes, error_checking, cligen_extensions],
-        ./licensing/license
+        ./licensing/license,
+        ./skeleton/[projectNimble]
 
 # ##############################
 # Logic
@@ -23,7 +22,7 @@ proc nimbusLaunch(projectName: string,
   let prjDir = githubName
   let nbLicenses = licenses.card
 
-  # Validity checks
+  # 1. Validity checks
   if projectName.isNil or githubName.isNil or nimbleName.isNil:
     error "nimbusLaunch requires 3 arguments at minimum: projectName, githubName, nimbleName.\n Run nimbleLaunch --help for more information."
   if not githubName.validGithub:
@@ -35,7 +34,7 @@ proc nimbusLaunch(projectName: string,
   if nbLicenses == 0:
     error "The project must have at least one license."
 
-  # Create the folder structure
+  # 2. Create the folder structure
   # .
   # ├── LICENSE-APACHEv2 (if applicable)
   # ├── LICENSE-MIT (if applicable)
@@ -58,6 +57,7 @@ proc nimbusLaunch(projectName: string,
   createDir(prjDir & "/src/private")
   createDir(prjDir & "/tests")
 
+  # 3. Add license(s)
   if nbLicenses == 1:
     writeFile(
       prjDir & "/LICENSE",
@@ -69,6 +69,19 @@ proc nimbusLaunch(projectName: string,
         prjDir & "/" & licenseFileName.getOrDefault(license),
         license(projectName, license)
       )
+
+  # 4. Add .gitignore
+  const gitignore = slurp"skeleton/gitignore.txt"
+  writeFile(
+    prjDir & "/.gitignore",
+    gitignore
+  )
+
+  # 5. Add nimble file
+  writeFile(
+    prjDir & "/" & nimbleName & ".nimble",
+    genNimbleFile(projectName, licenses)
+  )
 
 when isMainModule:
   dispatch nimbusLaunch
