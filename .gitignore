@@ -7,3 +7,5 @@ build/
 *.dylib
 *.a
 *.la
+*.exe
+*.dll
