@@ -1,5 +1,6 @@
 {projectName} is licensed under the MIT License
 Copyright (c) {year} {copyrightHolder}
+-----------------------------------------------------
 
 The MIT License (MIT)
 

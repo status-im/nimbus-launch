@@ -31,6 +31,20 @@ const
     GPLv3: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/gpl.html)."
   }.toTable
 
+  licenseFileName* = {
+    Apache2: "LICENSE-APACHEv2",
+    MIT: "LICENSE-MIT",
+    GPLv2: "LICENSE-GPLv2",
+    GPLv3: "LICENSE-GPLv3"
+  }.toTable
+
+proc getLicense*(licenses: Licenses): License =
+  ## Extract the license from a Licenses set
+  assert licenses.card == 1
+  for license in licenses:
+    result = license
+    break
+
 proc license*(projectName: string, license: License, year = getTime().utc().format("yyyy"),
               copyrightHolder = "Status Research & Development GmbH"): string =
 
@@ -51,12 +65,7 @@ proc licenseHeader*(projectName: string, licenses: Licenses,
   result.add &"# Copyright (c) {year} {copyrightHolder}\n"
 
   if nbLicenses == 1:
-    # Extract the unique license
-    var license: License
-    for lic in licenses:
-      license = lic
-      break
-
+    let license = licenses.getLicense
     result.add "# Licensed and distributed under the " & licenseHeaders.getOrDefault(license)
 
   else:
