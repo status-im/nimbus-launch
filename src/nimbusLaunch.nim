@@ -17,7 +17,7 @@ import  cligen,
 proc nimbusLaunch(projectName: string,
                   githubName: string,
                   nimbleName: string,
-                  licenses: Licenses = {MIT, Apache2}): int =
+                  licenses: Licenses = {MIT, Apachev2}): int =
 
   let prjDir = githubName
   let nbLicenses = licenses.card

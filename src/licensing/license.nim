@@ -20,21 +20,21 @@ const
   license_GPLv3 = slurp"./license_GPLv3.txt"
 
   licenseHeaders = {
-    Apache2: "Apache v2 license (license terms in the root directory or at http://www.apache.org/licenses/LICENSE-2.0).",
+    Apachev2: "Apache v2 license (license terms in the root directory or at http://www.apache.org/licenses/LICENSE-2.0).",
     MIT: "MIT license (license terms in the root directory or at http://opensource.org/licenses/MIT).",
     GPLv2: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).",
     GPLv3: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/gpl.html)."
   }.toTable
 
   licenseFileName* = {
-    Apache2: "LICENSE-APACHEv2",
+    Apachev2: "LICENSE-APACHEv2",
     MIT: "LICENSE-MIT",
     GPLv2: "LICENSE-GPLv2",
     GPLv3: "LICENSE-GPLv3"
   }.toTable
 
   licenseDescNimble = {
-    Apache2: "Apache License 2.0",
+    Apachev2: "Apache License 2.0",
     MIT: "MIT",
     GPLv2: "GPLv2",
     GPLv3: "GPLv3"
@@ -52,7 +52,7 @@ proc license*(projectName: string, license: License, year = getTime().utc().form
 
   case license:
   of MIT: result = fmt_const license_MIT
-  of Apache2: result = fmt_const license_APACHEv2
+  of Apachev2: result = fmt_const license_APACHEv2
   of GPLv2: result = fmt_const license_GPLv2
   of GPLv3: result = fmt_const license_GPLv3
 

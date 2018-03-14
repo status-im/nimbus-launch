@@ -9,7 +9,7 @@
 
 type
   License* = enum
-    MIT, Apache2, GPLv2, GPLv3
+    MIT, Apachev2, GPLv2, GPLv3
 
   Licenses* = set[License]
 
