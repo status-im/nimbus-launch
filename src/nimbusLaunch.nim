@@ -8,27 +8,26 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 import  cligen,
-        os,
+        os, strutils,
         ./private/[datatypes, error_checking, cligen_extensions]
 
 # ##############################
 # Logic
 
-proc nimbusLaunch(githubName: string,
+proc nimbusLaunch(projectName: string,
+                  githubName: string,
                   nimbleName: string,
                   licenses: Licenses = {MIT, Apache2}): int =
 
+  # Validity checks
   if not githubName.validGithub:
-    error "The package name on Github must constist of lowercase ASCII, numbers and hyphens (uppercase and underscores are not allowed)."
-
+    error "The package name on Github (" & githubName & ") must consist of lowercase ASCII, numbers and hyphens (uppercase and underscores are not allowed)."
   if not nimbleName.validIdentifier:
-    error "The package name on nimble must be a valid Nim identifier: ASCII, digits, underscore (no hyphen and doesn't start by a number)."
-
+    error "The package name on nimble (" & nimbleName & ") must be a valid Nim identifier: ASCII, digits, underscore (no hyphen and doesn't start by a number)."
   if githubName.existsDir:
     error "A directory with the name \"" & githubName & "\" already exists in the directory."
-
-  echo licenses
-  echo licenses.card # length (cardinality) of the set
+  if licenses.card == 0:
+    error "The project must have at least one license."
 
 when isMainModule:
   dispatch nimbusLaunch

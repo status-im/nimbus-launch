@@ -7,7 +7,8 @@
 #
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
-import ./datatypes
+import  argcvt, # argcvt is part of cligen
+        ./datatypes
 
 # #################################################
 # Add custom types support to cligen

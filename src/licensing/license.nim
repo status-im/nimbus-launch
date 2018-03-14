@@ -1,16 +1,14 @@
 # Nimbus-launch
 # Copyright (c) 2018 Status Research & Development GmbH
-# Licensed under either of
-#
-#  * Apache License, version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
-#  * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-#
+# Licensed and distributed under either of
+#   * Apache License, version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+#   * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 # #################################################
 # Generate the MIT license file for Status projects
 
-import  times, strformat, macros,
+import  times, strformat, macros, tables,
         ../private/datatypes
 
 macro parseConstStr(s: static[string]): untyped =
@@ -18,20 +16,53 @@ macro parseConstStr(s: static[string]): untyped =
   # So we transform the identifier to its string literal value
   result = newLit(s)
 
-proc license*(githubName: string, license: License, year = getTime().utc().format("yyyy"),
+const
+  # Embed the license at compile-team so that nimbusLaunch can be used standalone
+  # Unfortunately we can't use a table {"MIT": slurp"./license_MIT.txt", ...}.toTable as the procs don't work at compile-time
+  license_MIT = slurp"./license_MIT.txt"
+  license_APACHEv2 = slurp"./license_APACHEv2.txt"
+  license_GPLv2 = slurp"./license_GPLv2.txt"
+  license_GPLv3 = slurp"./license_GPLv3.txt"
+
+  licenseHeaders = {
+    Apache2: "Apache v2 license (license terms in the root directory or at http://www.apache.org/licenses/LICENSE-2.0).",
+    MIT: "MIT license (license terms in the root directory or at http://opensource.org/licenses/MIT).",
+    GPLv2: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).",
+    GPLv3: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/gpl.html)."
+  }.toTable
+
+proc license*(projectName: string, license: License, year = getTime().utc().format("yyyy"),
               copyrightHolder = "Status Research & Development GmbH"): string =
-
-  const
-    # Embed the license at compile-team so that nimbusLaunch can be used standalone
-    license_MIT = slurp"./license_MIT.txt"
-    license_APACHEv2 = slurp"./license_APACHEv2.txt"
-    license_GPLv2 = slurp"./license_GPLv2.txt"
-    license_GPLv3 = slurp"./license_GPLv3.txt"
-
-    # Unfortunately we can't use a table {"MIT": slurp"./license_MIT.txt", ...}.toTable as the procs don't work at compile-time
 
   case license:
   of MIT: result = &parseConstStr(license_MIT)
   of Apache2: result = &parseConstStr(license_APACHEv2)
   of GPLv2: result = &parseConstStr(license_GPLv2)
   of GPLv3: result = &parseConstStr(license_GPLv3)
+
+proc licenseHeader*(projectName: string, licenses: Licenses,
+                    year = getTime().utc().format("yyyy"),
+                    copyrightHolder = "Status Research & Development GmbH"): string =
+
+  let nbLicenses = licenses.card
+  assert nbLicenses != 0
+
+  result =   &"# {projectName}\n"
+  result.add &"# Copyright (c) {year} {copyrightHolder}\n"
+
+  if nbLicenses == 1:
+    # Extract the unique license
+    var license: License
+    for lic in licenses:
+      license = lic
+      break
+
+    result.add "# Licensed and distributed under the " & licenseHeaders.getOrDefault(license)
+
+  else:
+    result.add "# Licensed and distributed under either of"
+
+    for license in licenses:
+      result.add "#   * " & licenseHeaders.getOrDefault(license) & '\n'
+    result.add "# at your option. This file may not be copied, modified, or distributed except according to those terms."
+
