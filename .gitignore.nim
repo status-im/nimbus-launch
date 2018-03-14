@@ -1,0 +1,9 @@
+nimcache/
+
+# Executables shall be put in an ignored build/ directory
+# Ignore dynamic, static libs and libtool archive files
+build/
+*.so
+*.dylib
+*.a
+*.la
