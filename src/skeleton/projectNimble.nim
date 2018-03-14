@@ -6,7 +6,7 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 # #################################################
-# Generate the MIT license file for Status projects
+# Generate the nimble file for Status projects
 
 import  ../private/[datatypes, format],
         ../licensing/license
@@ -24,6 +24,7 @@ requires "nim >= 0.18.0"
 
 ### Helper functions
 proc test(name: string, defaultLang = "c") =
+  # TODO, don't forget to change defaultLang to `cpp` if the project requires C++
   if not dirExists "build":
     mkDir "build"
   if not dirExists "nimcache":

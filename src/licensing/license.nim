@@ -6,13 +6,13 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 # #################################################
-# Generate the MIT license file for Status projects
+# All things license
 
 import  times, strformat, tables, sequtils,
         ../private/[datatypes, format]
 
 const
-  # Embed the license at compile-team so that nimbusLaunch can be used standalone
+  # Embed the license at compile-time so that nimbusLaunch can be used standalone
   # Unfortunately we can't use a table {"MIT": slurp"./license_MIT.txt", ...}.toTable as the procs don't work at compile-time
   license_MIT = slurp"./license_MIT.txt"
   license_APACHEv2 = slurp"./license_APACHEv2.txt"
