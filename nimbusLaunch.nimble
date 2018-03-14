@@ -7,7 +7,7 @@ srcDir        = "src"
 
 ### Dependencies
 
-requires "nim >= 0.18.0"
+requires "nim >= 0.18.0", "https://github.com/c-blake/cligen#head"
 
 proc test(name: string, lang: string = "cpp") =
   if not dirExists "build":
