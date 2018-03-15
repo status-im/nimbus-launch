@@ -1,11 +1,11 @@
-packageName   = "nimbusLaunch"
+packageName   = "nimbus_launch"
 version       = "0.0.1"
 author        = "Status Research & Development GmbH"
 description   = "Create a Status Nim project skeleton"
 license       = "Apache License 2.0 or MIT"
 
 # This is a pure binary package, only install the binary
-bin           = @["src/nimbusLaunch"]
+bin           = @["src/nimbus_launch"]
 installDirs   = @[""]
 
 ### Dependencies

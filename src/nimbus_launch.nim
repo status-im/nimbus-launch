@@ -14,7 +14,7 @@ import  cligen,
 # ##############################
 # Logic
 
-proc nimbusLaunch(projectName: string,
+proc nimbus_launch(projectName: string,
                   githubName: string,
                   nimbleName: string,
                   licenses: Licenses = {MIT, Apachev2}): int =
@@ -24,7 +24,7 @@ proc nimbusLaunch(projectName: string,
 
   # 1. Validity checks
   if projectName.isNil or githubName.isNil or nimbleName.isNil:
-    error "nimbusLaunch requires 3 arguments at minimum: projectName, githubName, nimbleName.\n Run nimbleLaunch --help for more information."
+    error "nimbus_launch requires 3 arguments at minimum: projectName, githubName, nimbleName.\n Run nimbleLaunch --help for more information."
   if not githubName.validGithub:
     error "The package name on Github (" & githubName & ") must consist of lowercase ASCII, numbers and hyphens (uppercase and underscores are not allowed)."
   if not nimbleName.validIdentifier:
@@ -84,5 +84,5 @@ proc nimbusLaunch(projectName: string,
   )
 
 when isMainModule:
-  dispatch nimbusLaunch
+  dispatch nimbus_launch
 
