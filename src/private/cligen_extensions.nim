@@ -24,9 +24,25 @@ template argParse*(dst: Licenses, key: string, val: string, help: string) =
         incl(dst, supported_license)
         isValid = true
     if not isValid:
-      argRet(1, "Wrong input license(s) for param \"$1\"\n$2" %
+      argRet(1, "Wrong input license(s) for param \"$1\"\n$2, only MIT, Apachev2, GPLv2 and GPLv3 are supported." %
              [key, help])
 
 template argHelp*(helpT: seq[array[0..3, string]], defVal: Licenses,
+                  parNm: string, sh: string, parHelp: string) =
+  helpT.add([ keys(parNm, sh), "Licenses", $defVal, parHelp ])
+
+
+template argParse*(dst: TravisConfig, key: string, val: string, help: string) =
+  # Parse TravisConfig input
+  var isValid: bool = false
+  for supported_config in low(TravisConfig)..high(TravisConfig):       # Interesting read: "parseEnum is slow" https://forum.nim-lang.org/t/2949
+    if cmpIgnoreStyle(val, $supported_config) == 0:
+      dst = supported_config
+      isValid = true
+  if not isValid:
+    argRet(1, "Wrong input travis config for param \"$1\"\n$2, only StatusDocker and Generic are supported." %
+            [key, help])
+
+template argHelp*(helpT: seq[array[0..3, string]], defVal: TravisConfig,
                   parNm: string, sh: string, parHelp: string) =
   helpT.add([ keys(parNm, sh), "Licenses", $defVal, parHelp ])

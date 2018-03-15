@@ -68,10 +68,11 @@ proc licenseHeader*(projectName: string, licenses: Licenses,
 
   if nbLicenses == 1:
     let license = licenses.getLicense
-    result.add "# Licensed and distributed under the " & licenseHeaders.getOrDefault(license)
+    result.add "# Licensed and distributed under the " & licenseHeaders.getOrDefault(license) & '\n'
+    result.add "# This file may not be copied, modified, or distributed except according to those terms."
 
   else:
-    result.add "# Licensed and distributed under either of"
+    result.add "# Licensed and distributed under either of\n"
 
     for license in licenses:
       result.add "#   * " & licenseHeaders.getOrDefault(license) & '\n'

@@ -1,3 +1,5 @@
+# Travis config for {projectName} using Status Nim docker.
+
 sudo: required
 services:
   - docker

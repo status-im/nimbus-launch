@@ -7,7 +7,7 @@
 
 import  cligen,
         os, strutils, tables,
-        ./private/[datatypes, error_checking, cligen_extensions],
+        ./private/[datatypes, error_checking, cligen_extensions, format],
         ./licensing/license,
         ./skeleton/[projectNimble]
 
@@ -17,7 +17,9 @@ import  cligen,
 proc nimbus_launch(projectName: string,
                   githubName: string,
                   nimbleName: string,
-                  licenses: Licenses = {MIT, Apachev2}): int =
+                  licenses: Licenses = {MIT, Apachev2},
+                  travis_config: TravisConfig = StatusDocker
+                  ): int =
 
   let prjDir = githubName
   let nbLicenses = licenses.card
@@ -70,6 +72,8 @@ proc nimbus_launch(projectName: string,
         license(projectName, license)
       )
 
+  let licenseHeader = licenseHeader(projectName, licenses)
+
   # 4. Add .gitignore
   const gitignore = slurp"skeleton/gitignore.txt"
   writeFile(
@@ -81,6 +85,24 @@ proc nimbus_launch(projectName: string,
   writeFile(
     prjDir & "/" & nimbleName & ".nimble",
     genNimbleFile(projectName, licenses)
+  )
+
+  # 6. Add continuous integration
+  const
+    confGeneric = slurp"./continuous_integration/travis_generic.yml"
+    confStatusDocker = slurp"./continuous_integration/travis_statusdocker.yml"
+    confAppveyor = slurp"./continuous_integration/appveyor.yml"
+
+  let travisConf = case travis_config:
+                      of StatusDocker: fmt_const confStatusDocker
+                      of Generic:      fmt_const confGeneric
+  writeFile(
+    prjDir & "/.travis.yml",
+    travisConf
+  )
+  writeFile(
+    prjDir & "/.appveyor.yml",
+    confAppveyor # Due to Appveyor config requiring {} we don't format it.
   )
 
 when isMainModule:

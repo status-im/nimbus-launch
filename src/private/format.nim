@@ -9,11 +9,11 @@
 
 import macros, strformat
 
-macro parseConstStr*(s: static[string]): untyped =
+macro constStrtoLit*(s: static[string]): untyped =
   # The strformat `$` only works on string literals
   # So we transform the identifier to its string literal value
   result = newLit(s)
 
 template fmt_const*(s: static[string]): untyped =
   # Apply strformat on const string
-  &parseConstStr(s)
+  &constStrtoLit(s)
