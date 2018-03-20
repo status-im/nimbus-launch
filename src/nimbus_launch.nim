@@ -6,7 +6,7 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 import  cligen,
-        os, strutils, tables,
+        os, strutils, tables, strformat,
         ./private/[datatypes, error_checking, cligen_extensions, format],
         ./licensing/license,
         ./skeleton/[projectNimble, readme]
@@ -109,6 +109,32 @@ proc nimbus_launch(projectName: string,
   writeFile(
     prjDir & "/README.md",
     genReadme(projectName, githubName, nimbleName, licenses)
+  )
+
+  # 8. Add the source and test skeleton
+  writeFile(
+    prjDir & "/src/" & nimbleName & ".nim",
+    licenseHeader
+  )
+
+  var testString = licenseHeader
+  testString &= &"""
+
+
+import  unittest,
+        ../src/{nimbleName}
+
+suite "Your first test suite":
+  test "Your first test":
+    block: # independant block of subtest
+      discard
+    block:
+      discard
+"""
+
+  writeFile(
+    prjDir & "/tests/all_tests.nim",
+    testString
   )
 
 when isMainModule:
