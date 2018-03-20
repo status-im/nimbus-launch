@@ -9,7 +9,7 @@ import  cligen,
         os, strutils, tables,
         ./private/[datatypes, error_checking, cligen_extensions, format],
         ./licensing/license,
-        ./skeleton/[projectNimble]
+        ./skeleton/[projectNimble, readme]
 
 # ##############################
 # Logic
@@ -103,6 +103,12 @@ proc nimbus_launch(projectName: string,
   writeFile(
     prjDir & "/.appveyor.yml",
     confAppveyor # Due to Appveyor config requiring {} we don't format it.
+  )
+
+  # 7. Add the README
+  writeFile(
+    prjDir & "/README.md",
+    genReadme(projectName, githubName, nimbleName, licenses)
   )
 
 when isMainModule:

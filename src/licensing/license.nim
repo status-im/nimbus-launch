@@ -40,6 +40,13 @@ const
     GPLv3: "GPLv3"
   }.toTable
 
+  licenseBadge = {
+    Apachev2: "[![License: Apache](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)",
+    MIT: "[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)",
+    GPLv2: "[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)",
+    GPLv3: "[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)"
+  }.toTable
+
 proc getLicense*(licenses: Licenses): License {.noSideEffect.}=
   ## Extract the license from a Licenses set
   assert licenses.card == 1
@@ -78,6 +85,27 @@ proc licenseHeader*(projectName: string, licenses: Licenses,
       result.add "#   * " & licenseHeaders.getOrDefault(license) & '\n'
     result.add "# at your option. This file may not be copied, modified, or distributed except according to those terms."
 
+proc licenseReadme*(projectName: string, licenses: Licenses,
+                    year = getTime().utc().format("yyyy"),
+                    copyrightHolder = "Status Research & Development GmbH"): string {.noSideEffect.}=
+
+  let nbLicenses = licenses.card
+  assert nbLicenses != 0
+
+  result = ""
+
+  if nbLicenses == 1:
+    let license = licenses.getLicense
+    result.add "Licensed and distributed under the " & licenseHeaders.getOrDefault(license) & '\n'
+    result.add "This file may not be copied, modified, or distributed except according to those terms."
+
+  else:
+    result.add "Licensed and distributed under either of\n"
+
+    for license in licenses:
+      result.add "  * " & licenseHeaders.getOrDefault(license) & '\n'
+    result.add "at your option. This file may not be copied, modified, or distributed except according to those terms."
+
 proc genLicensesDesc*(licenses: Licenses): string {.noSideEffect.}=
 
   result = ""
@@ -88,3 +116,8 @@ proc genLicensesDesc*(licenses: Licenses): string {.noSideEffect.}=
     start = false
     result.add licenseDescNimble.getOrDefault license
 
+proc licensesBadges*(licenses: Licenses): string {.noSideEffect.} =
+
+  result = ""
+  for license in licenses:
+    result.add licenseBadge.getOrDefault license
