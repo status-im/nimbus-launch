@@ -49,7 +49,7 @@ Usage:
 ```
 
 By default:
-  - licenses are MIT + Apache v2 and supports MIT, Apachev2, GPLv2 and GPLv3
+  - licenses are `MIT,Apachev2` and support `MIT`, `Apachev2`, `GPLv2` and `GPLv3` or any combination of those, separated by a comma and no space.
   - travis_config is Docker with Status patches to devel.
     - The alternative is `Generic`, which tests linux, macOS and the latest stable and devel branches.
       Templates to install custom `apt-get` or `Homebrew` dependencies are included
