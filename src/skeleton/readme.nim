@@ -19,7 +19,7 @@ proc genReadme*(projectName: string,
   # 1. Project Name
   result = &"""# {projectName}
 [![Build Status (Travis)](https://img.shields.io/travis/status-im/{githubName}/master.svg?label=Linux%20/%20macOS "Linux/macOS build status (Travis)")](https://travis-ci.org/status-im/{githubName})
-[![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/status-im/{githubName}/master.svg?label=Windows "Windows build status (Appveyor)")]
+[![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/jarradh/{githubName}/master.svg?label=Windows "Windows build status (Appveyor)")](https://travis-ci.org/jarradh/{githubName})
 {licensesBadges(licenses)}
 ![Stability: experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
 
