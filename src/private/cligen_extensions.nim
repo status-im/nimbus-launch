@@ -7,13 +7,13 @@
 #
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
-import  argcvt, # argcvt is part of cligen
-        ./datatypes
+import  ./datatypes, strutils,
+        cligen/argcvt
 
 # #################################################
 # Add custom types support to cligen
 
-template argParse*(dst: Licenses, key: string, val: string, help: string) =
+proc argParse*(dst: var Licenses, key: string, val: string, help: string) =
   # Parse license input
   let args = val.split(',')
   dst = {}
@@ -24,15 +24,12 @@ template argParse*(dst: Licenses, key: string, val: string, help: string) =
         incl(dst, supported_license)
         isValid = true
     if not isValid:
-      argRet(1, "Wrong input license(s) for param \"$1\"\n$2, only MIT, Apachev2, GPLv2 and GPLv3 are supported." %
-             [key, help])
+      ERR("Wrong input license(s) for param \"$1\"\n$2, only MIT, Apachev2, GPLv2 and GPLv3 are supported." % [key, help])
 
-template argHelp*(helpT: seq[array[0..3, string]], defVal: Licenses,
-                  parNm: string, sh: string, parHelp: string) =
-  helpT.add([ keys(parNm, sh), "Licenses", $defVal, parHelp ])
+proc argHelp*(dfl: Licenses, a: var ArgcvtParams): seq[string] =
+  result = @[a.argKeys, "Licenses", a.argDf $dfl]
 
-
-template argParse*(dst: TravisConfig, key: string, val: string, help: string) =
+proc argParse*(dst: var TravisConfig, key: string, val: string, help: string) =
   # Parse TravisConfig input
   var isValid: bool = false
   for supported_config in low(TravisConfig)..high(TravisConfig):       # Interesting read: "parseEnum is slow" https://forum.nim-lang.org/t/2949
@@ -40,9 +37,7 @@ template argParse*(dst: TravisConfig, key: string, val: string, help: string) =
       dst = supported_config
       isValid = true
   if not isValid:
-    argRet(1, "Wrong input travis config for param \"$1\"\n$2, only StatusDocker and Generic are supported." %
-            [key, help])
+    ERR("Wrong input travis config for param \"$1\"\n$2, only StatusDocker and Generic are supported." % [key, help])
 
-template argHelp*(helpT: seq[array[0..3, string]], defVal: TravisConfig,
-                  parNm: string, sh: string, parHelp: string) =
-  helpT.add([ keys(parNm, sh), "Licenses", $defVal, parHelp ])
+proc argHelp*(dfl: TravisConfig, a: var ArgcvtParams): seq[string] =
+  result = @[a.argKeys, "Travis COnfig", a.argDf $dfl]

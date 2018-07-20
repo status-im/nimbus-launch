@@ -29,23 +29,26 @@ nimble install https://github.com/status-im/nimbus-launch@#master
 ## How to use
 
 ```
-nimbus_launch projectName githubName nimbleName
+nimbus_launch -p=projectName -g=githubName -n=nimbleName
 ```
 
 For example
 ```
-nimbus_launch MyAwesomeProject my-awesome-project my_awesome_project
+nimbus_launch -p=MyAwesomeProject -g=my-awesome-project -n=my_awesome_project
 ```
 
 Options:
 ```
 nimbus_launch --help
 Usage:
-  nimbus_launch [optional-params] {projectName:string} {githubName:string} {nimbleName:string}
+  nimbus_launch [required&optional-params]
   Options(opt-arg sep :|=|spc):
-  --help, -?                                        print this help message
-  -l=, --licenses=       Licenses  {MIT, Apachev2}  set licenses
-  -t=, --travis_config=  Licenses  StatusDocker     set travis_config
+  -h, --help                                             write this help to stdout
+  -p=, --projectName=    string         REQUIRED         set projectName
+  -g=, --githubName=     string         REQUIRED         set githubName
+  -n=, --nimbleName=     string         REQUIRED         set nimbleName
+  -l=, --licenses=       Licenses       {MIT, Apachev2}  set licenses
+  -t=, --travis_config=  Travis COnfig  StatusDocker     set travis_config
 ```
 
 By default:
