@@ -13,9 +13,6 @@ type
 
   Licenses* = set[License]
 
-  TravisConfig* = enum
-    StatusDocker, Generic
-
 const
   GithubChars* = {'a'..'z','0'..'9','-'}
     # Set of characters allowed for Github repo name

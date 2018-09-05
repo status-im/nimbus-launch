@@ -18,14 +18,13 @@ proc nimbus_launch(projectName: string,
                   githubName: string,
                   nimbleName: string,
                   licenses: Licenses = {MIT, Apachev2},
-                  travis_config: TravisConfig = StatusDocker
                   ): int =
 
   let prjDir = githubName
   let nbLicenses = licenses.card
 
   # 1. Validity checks
-  if projectName.isNil or githubName.isNil or nimbleName.isNil:
+  if projectName.len == 0 or githubName.len == 0 or nimbleName.len == 0:
     error "nimbus_launch requires 3 arguments at minimum: projectName, githubName, nimbleName.\n Run nimbleLaunch --help for more information."
   if not githubName.validGithub:
     error "The package name on Github (" & githubName & ") must consist of lowercase ASCII, numbers and hyphens (uppercase and underscores are not allowed)."
@@ -89,20 +88,16 @@ proc nimbus_launch(projectName: string,
 
   # 6. Add continuous integration
   const
-    confGeneric = slurp"./continuous_integration/travis_generic.yml"
-    confStatusDocker = slurp"./continuous_integration/travis_statusdocker.yml"
+    confTravis = slurp"./continuous_integration/travis.yml"
     confAppveyor = slurp"./continuous_integration/appveyor.yml"
 
-  let travisConf = case travis_config:
-                      of StatusDocker: fmt_const confStatusDocker
-                      of Generic:      fmt_const confGeneric
   writeFile(
     prjDir & "/.travis.yml",
-    travisConf
+    confTravis
   )
   writeFile(
     prjDir & "/.appveyor.yml",
-    confAppveyor # Due to Appveyor config requiring {} we don't format it.
+    confAppveyor
   )
 
   # 7. Add the README
