@@ -28,16 +28,3 @@ proc argParse*(dst: var Licenses, key: string, val: string, help: string) =
 
 proc argHelp*(dfl: Licenses, a: var ArgcvtParams): seq[string] =
   result = @[a.argKeys, "Licenses", a.argDf $dfl]
-
-proc argParse*(dst: var TravisConfig, key: string, val: string, help: string) =
-  # Parse TravisConfig input
-  var isValid: bool = false
-  for supported_config in low(TravisConfig)..high(TravisConfig):       # Interesting read: "parseEnum is slow" https://forum.nim-lang.org/t/2949
-    if cmpIgnoreStyle(val, $supported_config) == 0:
-      dst = supported_config
-      isValid = true
-  if not isValid:
-    ERR("Wrong input travis config for param \"$1\"\n$2, only StatusDocker and Generic are supported." % [key, help])
-
-proc argHelp*(dfl: TravisConfig, a: var ArgcvtParams): seq[string] =
-  result = @[a.argKeys, "Travis COnfig", a.argDf $dfl]

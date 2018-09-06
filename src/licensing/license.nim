@@ -20,10 +20,10 @@ const
   license_GPLv3 = slurp"./license_GPLv3.txt"
 
   licenseHeaders = {
-    Apachev2: "Apache v2 license (license terms in the root directory or at http://www.apache.org/licenses/LICENSE-2.0).",
-    MIT: "MIT license (license terms in the root directory or at http://opensource.org/licenses/MIT).",
-    GPLv2: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).",
-    GPLv3: "GPL v2 license (license terms in the root directory or at https://www.gnu.org/licenses/gpl.html)."
+    Apachev2: "Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)",
+    MIT: "MIT license: [LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT",
+    GPLv2: "GPL v2 license ([LICENSE-GPLv2](LICENSE-GPLv3) or at https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).",
+    GPLv3: "GPL v2 license ([LICENSE-GPLv3](LICENSE-GPLv3) or at https://www.gnu.org/licenses/gpl.html)."
   }.toTable
 
   licenseFileName* = {
@@ -100,11 +100,11 @@ proc licenseReadme*(projectName: string, licenses: Licenses,
     result.add "This file may not be copied, modified, or distributed except according to those terms."
 
   else:
-    result.add "Licensed and distributed under either of\n"
+    result.add "Licensed and distributed under either of\n\n"
 
     for license in licenses:
-      result.add "  * " & licenseHeaders.getOrDefault(license) & '\n'
-    result.add "at your option. This file may not be copied, modified, or distributed except according to those terms."
+      result.add "* " & licenseHeaders.getOrDefault(license) & '\n'
+    result.add "\nat your option. This file may not be copied, modified, or distributed except according to those terms."
 
 proc genLicensesDesc*(licenses: Licenses): string {.noSideEffect.}=
 
@@ -121,3 +121,4 @@ proc licensesBadges*(licenses: Licenses): string {.noSideEffect.} =
   result = ""
   for license in licenses:
     result.add licenseBadge.getOrDefault license
+    result.add "\n"
