@@ -24,7 +24,7 @@ proc argParse*(dst: var Licenses, key: string, val: string, help: string) =
         incl(dst, supported_license)
         isValid = true
     if not isValid:
-      ERR("Wrong input license(s) for param \"$1\"\n$2, only MIT, Apachev2, GPLv2 and GPLv3 are supported." % [key, help])
+      stderr.write("Wrong input license(s) for param \"$1\"\n$2, only MIT, Apachev2, GPLv2 and GPLv3 are supported.\n" % [key, help])
 
 proc argHelp*(dfl: Licenses, a: var ArgcvtParams): seq[string] =
   result = @[a.argKeys, "Licenses", a.argDf $dfl]
