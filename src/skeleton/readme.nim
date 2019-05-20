@@ -23,6 +23,8 @@ proc genReadme*(projectName: string,
 [![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/nimbus/{githubName}/master.svg?label=Windows "Windows build status (Appveyor)")](https://ci.appveyor.com/project/nimbus/{githubName})
 {licensesBadges(licenses)}![Stability: experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
 
+## Introduction
+
 Quick description
 
 ## Installation
@@ -31,6 +33,10 @@ You can install the developement version of the library through nimble with the 
 ```
 nimble install https://github.com/status-im/{githubName}@#master
 ```
+
+## Contributing
+
+When submitting pull requests, please add test cases for any new features or fixes and make sure `nimble test` is still able to execute the entire test suite successfully.
 
 ## License
 
